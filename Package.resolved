@@ -33,8 +33,17 @@
         "repositoryURL": "https://github.com/Sherwood-Analytics/Starscream",
         "state": {
           "branch": null,
-          "revision": "feae577c429add9497fa895b17e82cb0743215bd",
-          "version": "4.1.1"
+          "revision": "0367ea37f38da7b669c6afb94aae9277de9f2716",
+          "version": "4.1.2"
+        }
+      },
+      {
+        "package": "swift-crypto",
+        "repositoryURL": "https://github.com/apple/swift-crypto.git",
+        "state": {
+          "branch": null,
+          "revision": "127d3745c37b5705e4bc8d16c7951c48dcc3332c",
+          "version": "2.0.0"
         }
       }
     ]
