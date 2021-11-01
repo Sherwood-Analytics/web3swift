@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
         .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.16.1"),
         .package(url: "https://github.com/Sherwood-Analytics/Starscream", from: "4.1.2"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.4.2"),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.4.3"),
     ],
     targets: [
         .target(name: "web3swift", dependencies: [
