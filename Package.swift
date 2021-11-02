@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Web3swift",
+    name: "web3swift",
     platforms: [
         .macOS(.v10_15)
     ],
@@ -31,7 +31,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(name: "secp256k1"),
         .testTarget(
-            name: "Web3swiftTests",
+            name: "Web3swifTests",
             dependencies: ["Web3swift"]),
     ]
 )
