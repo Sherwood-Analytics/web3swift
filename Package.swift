@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Web3swift",
+    name: "web3swift",
     platforms: [
         .macOS(.v10_15)
     ],
