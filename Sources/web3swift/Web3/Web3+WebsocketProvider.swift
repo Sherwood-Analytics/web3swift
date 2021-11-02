@@ -5,13 +5,13 @@
 //  Created by Anton on 01/04/2019.
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
-import Starscream
+import WebSocketKit
 import PromiseKit
 import BigInt
 import Foundation
 
 public protocol IWebsocketProvider {
-    var socket: WebSocket {get}
+    var socket: WebSocket? {get}
     var delegate: Web3SocketDelegate {get set}
     func connectSocket() throws
     func disconnectSocket() throws
@@ -91,7 +91,8 @@ public protocol Web3SocketDelegate {
 }
 
 /// The default websocket provider.
-public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
+public class WebsocketProvider: Web3Provider, IWebsocketProvider {
+    
     
     /*public func didReceive(event: WebSocketEvent, client: WebSocket) {
         
@@ -114,7 +115,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     }()
     public var attachedKeystoreManager: KeystoreManager? = nil
     
-    public var socket: WebSocket
+    public var socket: WebSocket? = nil
     public var delegate: Web3SocketDelegate
     
     private var websocketConnected: Bool = false
@@ -122,12 +123,17 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
     
+    public var client = WebSocketClient(eventLoopGroupProvider: .createNew)
+    public var eventLoopGroup: EventLoopGroup
+    
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
+                 eventLoopGroup: EventLoopGroup,
                  network net: Networks? = nil) {
         websocketConnected = false
+        self.eventLoopGroup = eventLoopGroup
         var endpointString = endpoint.absoluteString
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
             return nil
@@ -159,18 +165,18 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         delegate = wsdelegate
         attachedKeystoreManager = manager
         let request = URLRequest(url: url)
-        socket = WebSocket(request: request)
-        socket.delegate = self
     }
     
     public init?(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
+                 eventLoopGroup: EventLoopGroup,
                  network net: Networks? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
         var finalEndpoint = endpoint
         websocketConnected = false
+        self.eventLoopGroup = eventLoopGroup
         if !(endpoint.hasPrefix("wss://") || endpoint.hasPrefix("ws://")) {
             return nil
         }
@@ -201,8 +207,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         delegate = wsdelegate
         attachedKeystoreManager = manager
         let request = URLRequest(url: url)
-        socket = WebSocket(request: request)
-        socket.delegate = self
     }
     
     deinit {
@@ -211,23 +215,27 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     
     public func connectSocket() {
         writeTimer?.invalidate()
-        socket.connect()
+        WebSocket.connect(to: url, on: eventLoopGroup) { c in
+            self.socket = c
+        }
     }
     
     public func disconnectSocket() {
         writeTimer?.invalidate()
-        socket.disconnect()
+        self.socket?.close()
     }
     
     public class func connectToSocket(_ endpoint: String,
                                       delegate: Web3SocketDelegate,
                                       projectId: String? = nil,
                                       keystoreManager manager: KeystoreManager? = nil,
+                                      eventLoopGroup: EventLoopGroup,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
                                                      keystoreManager: manager,
+                                                     eventLoopGroup: eventLoopGroup,
                                                      network: net) else {
                                                 return nil
         }
@@ -239,11 +247,13 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                                       delegate: Web3SocketDelegate,
                                       projectId: String? = nil,
                                       keystoreManager manager: KeystoreManager? = nil,
+                                      eventLoopGroup: EventLoopGroup,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
                                                      keystoreManager: manager,
+                                                     eventLoopGroup: eventLoopGroup,
                                                      network: net) else {
                                                         return nil
         }
@@ -273,10 +283,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         if websocketConnected {
             writeTimer?.invalidate()
             for s in messagesStringToWrite {
-                socket.write(string: s)
+                socket?.send(s)
             }
             for d in messagesDataToWrite {
-                socket.write(data: d)
+                socket?.send(d.bytes)
             }
         }
     }

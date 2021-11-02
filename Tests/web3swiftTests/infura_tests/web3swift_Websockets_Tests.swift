@@ -6,9 +6,9 @@
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
 import XCTest
-import Starscream
 
 @testable import web3swift
+import NIOPosix
 
 class SpyDelegate: Web3SocketDelegate {
     
@@ -47,7 +47,7 @@ class web3swift_websocket_Tests: XCTestCase {
     var socketProvider: InfuraWebsocketProvider?
     
     func testSubscribeOnPendingTXs() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate, eventLoopGroup: MultiThreadedEventLoopGroup(numberOfThreads: 1)) else {
             return XCTFail()
         }
         self.socketProvider = socketProvider
@@ -71,7 +71,7 @@ class web3swift_websocket_Tests: XCTestCase {
     }
     
     func testSubscribeOnLogs() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate, eventLoopGroup: MultiThreadedEventLoopGroup(numberOfThreads: 1)) else {
             return XCTFail()
         }
         self.socketProvider = socketProvider
@@ -95,7 +95,7 @@ class web3swift_websocket_Tests: XCTestCase {
     }
     
     func testSubscribeOnNewHeads() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate, eventLoopGroup: MultiThreadedEventLoopGroup(numberOfThreads: 1)) else {
             return XCTFail()
         }
         self.socketProvider = socketProvider
@@ -119,7 +119,7 @@ class web3swift_websocket_Tests: XCTestCase {
     }
     
     func testFilter() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate, eventLoopGroup: MultiThreadedEventLoopGroup(numberOfThreads: 1)) else {
             return XCTFail()
         }
         self.socketProvider = socketProvider

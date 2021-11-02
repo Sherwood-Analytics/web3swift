@@ -5,7 +5,7 @@
 //
 import Foundation
 import BigInt
-import Starscream
+import WebSocketKit
 
 public enum BlockNumber {
     case pending
@@ -47,7 +47,8 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     public init?(_ network: Networks,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
+                 keystoreManager manager: KeystoreManager? = nil,
+                 eventLoopGroup: EventLoopGroup) {
         guard network == Networks.Kovan
             || network == Networks.Rinkeby
             || network == Networks.Ropsten
@@ -59,39 +60,48 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                    delegate: delegate,
                    projectId: projectId,
                    keystoreManager: manager,
+                   eventLoopGroup: eventLoopGroup,
                    network: network)
     }
     
     public init?(_ endpoint: String,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
+                 keystoreManager manager: KeystoreManager? = nil,
+                 eventLoopGroup: EventLoopGroup
+    ) {
         guard URL(string: endpoint) != nil else {return nil}
         super.init(endpoint,
                    delegate: delegate,
                    projectId: projectId,
-                   keystoreManager: manager)
+                   keystoreManager: manager,
+                   eventLoopGroup: eventLoopGroup)
     }
     
     public init?(_ endpoint: URL,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
+                 keystoreManager manager: KeystoreManager? = nil,
+                 eventLoopGroup: EventLoopGroup) {
         super.init(endpoint,
                    delegate: delegate,
                    projectId: projectId,
-                   keystoreManager: manager)
+                   keystoreManager: manager,
+                   eventLoopGroup: eventLoopGroup)
     }
     
     override public class func connectToSocket(_ endpoint: String,
                                                delegate: Web3SocketDelegate,
                                                projectId: String? = nil,
                                                keystoreManager manager: KeystoreManager? = nil,
+                                            eventLoopGroup: EventLoopGroup,
                                                network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId,
-                                                           keystoreManager: manager) else {return nil}
+                                                           keystoreManager: manager,
+                                                           eventLoopGroup: eventLoopGroup
+        ) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
     }
@@ -100,11 +110,14 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                                                delegate: Web3SocketDelegate,
                                                projectId: String? = nil,
                                                keystoreManager manager: KeystoreManager? = nil,
+                                               eventLoopGroup: EventLoopGroup,
                                                network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId,
-                                                           keystoreManager: manager) else {return nil}
+                                                           keystoreManager: manager,
+                                                           eventLoopGroup: eventLoopGroup
+        ) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
     }
@@ -112,11 +125,14 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     public static func connectToInfuraSocket(_ network: Networks,
                                              delegate: Web3SocketDelegate,
                                              projectId: String? = nil,
-                                             keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
+                                             keystoreManager manager: KeystoreManager? = nil,
+                                             eventLoopGroup: EventLoopGroup) -> InfuraWebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(network,
                                                            delegate: delegate,
                                                            projectId: projectId,
-                                                           keystoreManager: manager) else {return nil}
+                                                           keystoreManager: manager,
+                                                           eventLoopGroup: eventLoopGroup
+                                                           ) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
     }

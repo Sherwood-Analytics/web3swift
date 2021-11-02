@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Web3swift",
     platforms: [
-        .macOS(.v10_12), .iOS(.v11),
+        .macOS(.v10_15)
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
@@ -16,14 +16,14 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
         .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.16.1"),
-        .package(url: "https://github.com/Sherwood-Analytics/Starscream", from: "4.1.4"),
+        .package(url: "https://github.com/vapor/websocket-kit", from: "2.2.0"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.4.2"),
     ],
     targets: [
         .target(name: "web3swift", dependencies: [
             .product(name: "BigInt", package: "BigInt"),
             .product(name: "PromiseKit", package: "PromiseKit"),
-            .product(name: "Starscream", package: "Starscream"),
+            .product(name: "WebSocketKit", package: "websocket-kit"),
             .product(name: "CryptoSwift", package: "CryptoSwift"),
             .byName(name: "secp256k1")
         ]),
