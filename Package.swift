@@ -31,7 +31,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(name: "secp256k1"),
         .testTarget(
-            name: "web3swiftTests",
-            dependencies: ["web3swift"]),
+            name: "Web3swiftTests",
+            dependencies: ["Web3swift"]),
     ]
 )
