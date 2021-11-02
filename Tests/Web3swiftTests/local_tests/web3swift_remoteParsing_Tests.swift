@@ -8,7 +8,7 @@ import XCTest
 import CryptoSwift
 import BigInt
 
-@testable import web3swift
+@testable import Web3swift
 
 // MARK: Works only with network connection
 class web3swift_remoteParsing_Tests: XCTestCase {

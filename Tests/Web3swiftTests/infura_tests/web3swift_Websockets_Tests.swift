@@ -7,7 +7,7 @@
 //
 import XCTest
 
-@testable import web3swift
+@testable import Web3swift
 import NIOPosix
 
 class SpyDelegate: Web3SocketDelegate {

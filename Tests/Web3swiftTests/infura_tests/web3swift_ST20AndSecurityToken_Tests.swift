@@ -8,7 +8,7 @@
 import XCTest
 import BigInt
 
-@testable import web3swift
+@testable import Web3swift
 
 // MARK: Works only with network connection
 class web3swift_ST20AndSecurityToken_Tests: XCTestCase {

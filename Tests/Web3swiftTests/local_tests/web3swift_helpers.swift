@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 
-import web3swift
+import Web3swift
 
 class web3swift_helpers {
     static func localDeployERC20() throws -> (web3, TransactionSendingResult, TransactionReceipt, String) {
