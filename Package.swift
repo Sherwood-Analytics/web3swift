@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "web3swift",
+    name: "Web3swift",
     platforms: [
         .macOS(.v10_15)
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
-        .library(name: "web3swift", targets: ["web3swift"]),
+        .library(name: "Web3swift", targets: ["Web3swift"]),
     ],
     
     dependencies: [
@@ -20,7 +20,7 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.4.1"),
     ],
     targets: [
-        .target(name: "web3swift", dependencies: [
+        .target(name: "Web3swift", dependencies: [
             .product(name: "BigInt", package: "BigInt"),
             .product(name: "PromiseKit", package: "PromiseKit"),
             .product(name: "WebSocketKit", package: "websocket-kit"),
