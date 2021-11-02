@@ -4,7 +4,12 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import BigInt
+
+var UINT64_MAX:UInt64 = UInt64.max
 
 public struct ABIDecoder {
     

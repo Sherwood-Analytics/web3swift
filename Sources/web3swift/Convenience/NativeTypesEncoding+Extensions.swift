@@ -6,6 +6,9 @@
 
 import Foundation
 import BigInt
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension Data {
     func setLengthLeft(_ toBytes: UInt64, isNegative:Bool = false ) -> Data? {

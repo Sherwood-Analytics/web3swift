@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension String {
     var fullRange: Range<Index> {

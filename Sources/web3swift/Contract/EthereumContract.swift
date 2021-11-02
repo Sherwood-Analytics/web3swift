@@ -5,6 +5,9 @@
 
 import Foundation
 import BigInt
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 //import EthereumAddress
 //import EthereumABI
 

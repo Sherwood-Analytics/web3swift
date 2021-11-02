@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import CryptoSwift
 
 func toByteArray<T>(_ value: T) -> [UInt8] {

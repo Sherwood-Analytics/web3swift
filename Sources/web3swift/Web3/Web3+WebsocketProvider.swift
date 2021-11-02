@@ -9,6 +9,10 @@ import WebSocketKit
 import PromiseKit
 import BigInt
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 
 public protocol IWebsocketProvider {
     var socket: WebSocket? {get}
@@ -164,7 +168,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider {
         url = URL(string: endpointString)!
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        let request = URLRequest(url: url)
     }
     
     public init?(_ endpoint: String,
@@ -206,7 +209,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider {
         url = URL(string: finalEndpoint)!
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        let request = URLRequest(url: url)
     }
     
     deinit {
@@ -276,10 +278,12 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider {
         } else if dMessage != nil {
             self.messagesDataToWrite.append(dMessage!)
         }
-        writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
+        writeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            self.performWriteOperations()
+        }
     }
     
-    @objc private func performWriteOperations() {
+    private func performWriteOperations() {
         if websocketConnected {
             writeTimer?.invalidate()
             for s in messagesStringToWrite {

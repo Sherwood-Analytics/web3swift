@@ -6,6 +6,9 @@
 //  Copyright © 2019 levantAJ. All rights reserved.
 //
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 struct AnyCodingKey: CodingKey {
     var stringValue: String

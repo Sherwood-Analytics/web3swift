@@ -154,7 +154,9 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
         }
         try writeMessage(method: method, params: params)
-        filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
+        filterTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            try? self.getFilterChanges()
+        }
     }
     
     public func setFilterAndGetChanges(method: InfuraWebsocketMethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
@@ -171,7 +173,9 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
         }
         try writeMessage(method: method, params: params)
-        filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterLogs), userInfo: nil, repeats: true)
+        filterTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            try? self.getFilterLogs()
+        }
     }
     
     public func setFilterAndGetLogs(method: InfuraWebsocketMethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
@@ -179,7 +183,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         try setFilterAndGetLogs(method: method, params: [filterParams])
     }
     
-    @objc public func getFilterChanges() throws {
+    public func getFilterChanges() throws {
         if let id = filterID {
             filterTimer?.invalidate()
             let method = InfuraWebsocketMethod.getFilterChanges
@@ -187,7 +191,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         }
     }
     
-    @objc public func getFilterLogs() throws {
+    public func getFilterLogs() throws {
         if let id = filterID {
             filterTimer?.invalidate()
             let method = InfuraWebsocketMethod.getFilterLogs

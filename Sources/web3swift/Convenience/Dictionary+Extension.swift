@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension Dictionary where Key == String, Value: Equatable {
     func keyForValue(value : Value) -> String? {

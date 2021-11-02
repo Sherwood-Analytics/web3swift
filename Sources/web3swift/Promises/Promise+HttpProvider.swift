@@ -6,6 +6,9 @@
 
 import Foundation
 import PromiseKit
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension Web3HttpProvider {
     

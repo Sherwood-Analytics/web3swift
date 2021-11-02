@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import CoreImage
 import BigInt
 //import EthereumAddress
 //import EthereumABI
@@ -79,14 +78,14 @@ extension Web3 {
             return mainPart
         }
         
-        public func toImage(scale: Double = 1.0) -> CIImage {
+        /*public func toImage(scale: Double = 1.0) -> CIImage {
             return EIP67CodeGenerator.createImage(from: self, scale: scale)
-        }
+        }*/
     }
 
     public struct EIP67CodeGenerator {
         
-        public static func createImage(from: EIP67Code, scale: Double = 1.0) -> CIImage {
+        /*public static func createImage(from: EIP67Code, scale: Double = 1.0) -> CIImage {
             guard let string = from.toString().addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {return CIImage()}
             guard let data = string.data(using: .utf8, allowLossyConversion: false) else {return CIImage()}
             let filter = CIFilter(name: "CIQRCodeGenerator", parameters: ["inputMessage" : data, "inputCorrectionLevel":"L"])
@@ -94,7 +93,7 @@ extension Web3 {
             let transformation = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
             image = image.transformed(by: transformation)
             return image
-        }
+        }*/
     }
 
     public struct EIP67CodeParser {

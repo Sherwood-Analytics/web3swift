@@ -8,6 +8,9 @@
 
 import Foundation
 import secp256k1
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public struct SECP256K1 {
     public struct UnmarshaledSignature{
@@ -338,22 +341,7 @@ extension SECP256K1 {
     }
     
     internal static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (mutableRBBytes) -> Int32? in
-                if let mutableRBytes = mutableRBBytes.baseAddress, mutableRBBytes.count > 0 {
-                    let mutableBytes = mutableRBytes.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, 32, mutableBytes)
-                } else {
-                    return nil
-                }
-            }
-            if let res = result, res == errSecSuccess {
-                return data
-            } else {
-                continue
-            }
-        }
+        return Data.randomBytes(length: length)
         return nil
     }
     

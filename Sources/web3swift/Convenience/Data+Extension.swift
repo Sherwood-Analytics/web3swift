@@ -5,6 +5,17 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+import CryptoSwift
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(ucrt)
+import ucrt
+#endif
 
 public extension Data {
     
@@ -58,23 +69,14 @@ public extension Data {
     //            body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
     //        }
     //    }
+    public static func randomIV(_ count: Int) -> Array<UInt8> {
+       (0..<count).map({ _ in UInt8.random(in: 0...UInt8.max) })
+     }
     
     static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
-                if let bodyAddress = body.baseAddress, body.count > 0 {
-                    let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, 32, pointer)
-                } else {
-                    return nil
-                }
-            }
-            if let notNilResult = result, notNilResult == errSecSuccess {
-                return data
-            }
-        }
-        return nil
+        var bytes = randomIV(length)
+        
+        return Data(bytes: bytes, count: length)
     }
     
     //    static func randomBytes(length: Int) -> Data? {
